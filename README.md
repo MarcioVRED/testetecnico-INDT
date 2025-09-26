@@ -40,14 +40,14 @@ PropostaService API: http://localhost:5000/swagger
 ContratacaoService API: http://localhost:5001/swagger
 
 RabbitMQ Management: http://localhost:15672
-Usuário: guest
-Senha: guest
+- Usuário: guest
+- Senha: guest
 
 SQL Server:
 
 Servidor: localhost:1433
-Usuário: sa
-Senha: YourStrong!Passw0rd
+- Usuário: sa
+- Senha: Passw0rd!
 
 As migrations podem ser aplicadas automaticamente na inicialização da API.
 
@@ -73,7 +73,7 @@ dotnet ef database update
 
 Opcionalmente, todos os scripts SQL estão em:
 
-/Database/Scripts
+- /Database/Scripts
 
 Seguindo a ordem de versionamento.
 
@@ -86,24 +86,24 @@ Executar todos os testes unitários:
 dotnet test
 ```
 
-Cobertura acima de 80%
+- Cobertura acima de 80%
 
-Testes de Domain, Application, API e Consumer/Mensageria incluídos
+- Testes de Domain, Application, API e Consumer/Mensageria incluídos
 
 
 ## Postman Collection
 
 Coleção Postman pronta em:
 
-/postman/Insurance.postman_collection.json
+- /Insurance.postman_collection.json
 
-Para importar:
+- Para importar:
 
-Abra o Postman → Import → selecione o arquivo .json
+- - Abra o Postman → Import → selecione o arquivo .json
 
-Ajuste a URL base (localhost:5000 ou 5001)
+- - Ajuste a URL base (localhost:5000 ou 5001)
 
-Execute os requests de teste
+- - Execute os requests de teste
 
 
 ## Arquitetura e Fluxo
@@ -121,5 +121,5 @@ Eventos – PropostaAprovadaEvent propagado via RabbitMQ (Adapters)
 
 Diagrama completo disponível em:
 
-/docs/Arquitetura.png
+- /diagrama-solucao.png
 
