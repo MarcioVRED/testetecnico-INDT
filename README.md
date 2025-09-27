@@ -92,10 +92,20 @@ Executar todos os testes unitários:
 dotnet test
 ```
 
-- Cobertura acima de 80%
+- Testes de Domain, Application, API e Consumer/Mensageria incluídos.
 
-- Testes de Domain, Application, API e Consumer/Mensageria incluídos
+- Incluindo em C:\labs\testetecnico-INDT\coveragereport/index.html com a cobertura dos itens da solução.
+- Para atualizar os dados de coberturar executar na raiz do projeto 
 
+```bash
+dotnet test ./Insurance.PropostaService.Api.Tests/ --collect:"XPlat Code Coverage"
+dotnet test ./Insurance.Infra.Repositories.Tests/ --collect:"XPlat Code Coverage"
+dotnet test ./Insurance.Domain.Entities.Tests/ --collect:"XPlat Code Coverage"
+dotnet test ./Insurance.ContratacaoService.Api.Tests/ --collect:"XPlat Code Coverage"
+dotnet test ./Insurance.Application.Tests/ --collect:"XPlat Code Coverage"
+
+reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coveragereport -reporttypes:Html
+```
 
 ## Postman Collection
 
