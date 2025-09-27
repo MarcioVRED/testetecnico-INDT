@@ -28,8 +28,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{380A7511-A354-6D7A-0CC0-8FA1F1BA7B6C}"
 	ProjectSection(SolutionItems) = preProject
 		docs\diagrama-solucao.png = docs\diagrama-solucao.png
-		docker\docker-compose.yml = docker\docker-compose.yml
+		docker-compose.yml = docker-compose.yml
 		docs\InsuranceAPIs.postman_collection.json = docs\InsuranceAPIs.postman_collection.json
+		docs\database\scripts\scriptsInsurance.sql = docs\database\scripts\scriptsInsurance.sql
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insurance.PropostaService.Api.Tests", "Insurance.PropostaService.Api.Tests\Insurance.PropostaService.Api.Tests.csproj", "{E88D44F9-3F1E-B578-CA96-90B6DDE02513}"

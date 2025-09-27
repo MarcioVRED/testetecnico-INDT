@@ -79,7 +79,7 @@ dotnet ef database update
 
 Opcionalmente, todos os scripts SQL estão em:
 
-- docs/Database/Scripts
+- docs/database/scripts/scriptsInsurance.sql
 
 Seguindo a ordem de versionamento.
 
@@ -123,6 +123,18 @@ Infra – Repositórios e persistência (SQL Server)
 API – Controllers (Ports)
 
 Eventos – PropostaAprovadaEvent propagado via RabbitMQ (Adapters)
+
+
+## Comunicação entre APIs via Mensageria
+
+A solução implementa comunicação assíncrona entre serviços utilizando RabbitMQ como message broker e MassTransit como abstração de mensageria.
+
+Ao aprovar uma proposta na PropostaService API, um evento PropostaAprovadaEvent é publicado.
+
+A ContratacaoService API escuta esse evento e, ao recebê-lo, inicia o processo de contratação da proposta automaticamente.
+
+Essa arquitetura desacopla os serviços e garante escalabilidade e resiliência.
+
 
 
 Diagrama completo disponível em:
