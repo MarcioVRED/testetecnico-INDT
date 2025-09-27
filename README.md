@@ -89,7 +89,7 @@ Seguindo a ordem de versionamento.
 Executar todos os testes unitários:
 
 ```bash
-dotnet test
+dotnet test --settings solution.runsettings --collect:"XPlat code coverage"
 ```
 
 - Testes de Domain, Application, API e Consumer/Mensageria incluídos.
@@ -98,11 +98,7 @@ dotnet test
 - Para atualizar os dados de coberturar executar na raiz do projeto 
 
 ```bash
-dotnet test ./Insurance.PropostaService.Api.Tests/ --collect:"XPlat Code Coverage"
-dotnet test ./Insurance.Infra.Repositories.Tests/ --collect:"XPlat Code Coverage"
-dotnet test ./Insurance.Domain.Entities.Tests/ --collect:"XPlat Code Coverage"
-dotnet test ./Insurance.ContratacaoService.Api.Tests/ --collect:"XPlat Code Coverage"
-dotnet test ./Insurance.Application.Tests/ --collect:"XPlat Code Coverage"
+dotnet test --settings solution.runsettings --collect:"XPlat code coverage"
 
 reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coveragereport -reporttypes:Html
 ```

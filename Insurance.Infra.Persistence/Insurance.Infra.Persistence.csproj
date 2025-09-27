@@ -18,5 +18,5 @@
   <ItemGroup>
     <ProjectReference Include="..\Insurance.Domain.Entities\Insurance.Domain.Entities.csproj" />
   </ItemGroup>
-
+	
 </Project>
