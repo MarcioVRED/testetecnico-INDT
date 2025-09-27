@@ -1,0 +1,172 @@
+{
+  "info": {
+    "name": "Insurance Services - Full Examples",
+    "_postman_id": "abcd1234-5678-efgh-ijkl-9876543210ab",
+    "description": "Coleção completa para testar PropostaService.API e ContratacaoService.API com exemplos de request/response.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "PropostaService.API",
+      "item": [
+        {
+          "name": "Criar Proposta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrlProposta}}",
+              "host": [ "{{baseUrlProposta}}" ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cliente\": \"João Silva\",\n  \"valor\": 1000.0\n}"
+            }
+          },
+          "response": [
+            {
+              "name": "Exemplo de resposta",
+              "originalRequest": {},
+              "status": "200 OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "body": "{\n  \"id\": \"{{propostaId}}\",\n  \"cliente\": \"João Silva\",\n  \"valor\": 1000.0,\n  \"status\": \"EmAnalise\",\n  \"createdAt\": \"2025-09-26T12:00:00Z\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Listar Propostas",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrlProposta}}",
+              "host": [ "{{baseUrlProposta}}" ]
+            }
+          },
+          "response": [
+            {
+              "name": "Exemplo de resposta",
+              "status": "200 OK",
+              "code": 200,
+              "body": "[\n  {\n    \"id\": \"{{propostaId}}\",\n    \"cliente\": \"João Silva\",\n    \"valor\": 1000.0,\n    \"status\": \"EmAnalise\",\n    \"createdAt\": \"2025-09-26T12:00:00Z\"\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Alterar Status Proposta",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrlProposta}}/{{propostaId}}/status",
+              "host": [ "{{baseUrlProposta}}" ],
+              "path": [ "{{propostaId}}", "status" ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Aprovada\"\n}"
+            }
+          },
+          "response": [
+            {
+              "name": "Exemplo de resposta",
+              "status": "200 OK",
+              "code": 200,
+              "body": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ContratacaoService.API",
+      "item": [
+        {
+          "name": "Contratar Proposta",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrlContratacao}}/contratar/{{propostaId}}",
+              "host": [ "{{baseUrlContratacao}}" ],
+              "path": [ "contratar", "{{propostaId}}" ]
+            }
+          },
+          "response": [
+            {
+              "name": "Exemplo de resposta",
+              "status": "200 OK",
+              "code": 200,
+              "body": "\"Proposta contratada com sucesso!\""
+            }
+          ]
+        },
+        {
+          "name": "Listar Contratacoes",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrlContratacao}}",
+              "host": [ "{{baseUrlContratacao}}" ]
+            }
+          },
+          "response": [
+            {
+              "name": "Exemplo de resposta",
+              "status": "200 OK",
+              "code": 200,
+              "body": "[\n  {\n    \"id\": \"{{contratacaoId}}\",\n    \"propostaId\": \"{{propostaId}}\",\n    \"contratadoEm\": \"2025-09-26T12:30:00Z\",\n    \"createdAt\": \"2025-09-26T12:30:00Z\"\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Obter Contratacao por ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrlContratacao}}/{{contratacaoId}}",
+              "host": [ "{{baseUrlContratacao}}" ],
+              "path": [ "{{contratacaoId}}" ]
+            }
+          },
+          "response": [
+            {
+              "name": "Exemplo de resposta",
+              "status": "200 OK",
+              "code": 200,
+              "body": "{\n  \"id\": \"{{contratacaoId}}\",\n  \"propostaId\": \"{{propostaId}}\",\n  \"contratadoEm\": \"2025-09-26T12:30:00Z\",\n  \"createdAt\": \"2025-09-26T12:30:00Z\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrlProposta",
+      "value": "http://localhost:5000/api/proposta"
+    },
+    {
+      "key": "baseUrlContratacao",
+      "value": "http://localhost:5001/api/contratacao"
+    },
+    {
+      "key": "propostaId",
+      "value": ""
+    },
+    {
+      "key": "contratacaoId",
+      "value": ""
+    }
+  ]
+}

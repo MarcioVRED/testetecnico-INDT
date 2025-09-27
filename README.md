@@ -8,7 +8,7 @@ Solução modular em .NET 8 com arquitetura hexagonal, composta por:
 - **Application** – Serviços de aplicação, DTOs, eventos e mensageria  
 - **Infra** – Repositórios e persistência  
 
-Inclui **RabbitMQ** para eventos assíncronos e **SQL Server** para persistência.
+Inclui **RabbitMQ** e **MassTransit** para eventos assíncronos e **SQL Server** para persistência.
 
 ---
 
@@ -24,7 +24,7 @@ Inclui **RabbitMQ** para eventos assíncronos e **SQL Server** para persistênci
 
 ```bash
 git clone <URL_DO_REPOSITORIO>
-cd Insurance
+cd testetecnico-INDT
 ```
 
 ## Execução com Docker
@@ -33,6 +33,13 @@ Build e execução de todos os containers
 ```bash
 docker-compose up --build
 ```
+
+Remover os Containers
+
+```bash
+docker-compose down -v
+```
+
 
 ## Acesso às APIs e serviços
 
@@ -47,7 +54,7 @@ SQL Server:
 
 Servidor: localhost:1433
 - Usuário: sa
-- Senha: Passw0rd!
+- Senha: SenhaForte12345"
 
 As migrations podem ser aplicadas automaticamente na inicialização da API.
 
@@ -58,7 +65,7 @@ Migrations com EF Core
 1. Criar migrations (executar na pasta do projeto de API):
 
 ```bash
-cd Insurance.PropostaService.Api
+cd Insurance.Infra.Persistence
 dotnet ef migrations add InitialCreate
 ```
 
@@ -68,12 +75,11 @@ dotnet ef migrations add InitialCreate
 dotnet ef database update
 ```
 
-
 ## Scripts SQL
 
 Opcionalmente, todos os scripts SQL estão em:
 
-- /Database/Scripts
+- docs/Database/Scripts
 
 Seguindo a ordem de versionamento.
 
@@ -95,7 +101,7 @@ dotnet test
 
 Coleção Postman pronta em:
 
-- /Insurance.postman_collection.json
+- docs/Insurance.postman_collection.json
 
 - Para importar:
 
@@ -121,5 +127,5 @@ Eventos – PropostaAprovadaEvent propagado via RabbitMQ (Adapters)
 
 Diagrama completo disponível em:
 
-- /diagrama-solucao.png
+- docs/diagrama-solucao.png
 

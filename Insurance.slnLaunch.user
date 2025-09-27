@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "Novo Perfil",
+    "Projects": [
+      {
+        "Path": "Insurance.PropostaService.Api\\Insurance.PropostaService.Api.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "Insurance.ContratacaoService.Api\\Insurance.ContratacaoService.Api.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="8.5.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Insurance.Domain.Repositories\Insurance.Domain.Repositories.csproj" />
+    <ProjectReference Include="..\Insurance.Infra.Repositories\Insurance.Infra.Repositories.csproj" />
+  </ItemGroup>
+
+</Project>
