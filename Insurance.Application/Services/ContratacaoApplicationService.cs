@@ -9,21 +9,14 @@ namespace Insurance.Application;
 public class ContratacaoApplicationService : IContratacaoApplicationService
 {
     private readonly IContratacaoRepository _contratacaoRepository;
-    private readonly IPropostaRepository _propostaRepository;
 
-    public ContratacaoApplicationService(IContratacaoRepository contratacaoRepository,
-                              IPropostaRepository propostaRepository)
+    public ContratacaoApplicationService(IContratacaoRepository contratacaoRepository)
     {
         _contratacaoRepository = contratacaoRepository;
-        _propostaRepository = propostaRepository;
     }
 
     public async Task ContratarProposta(Guid propostaId)
     {
-        var proposta = await _propostaRepository.GetByIdAsync(propostaId);
-        if (proposta == null) throw new PropostaNaoEncontradaException(propostaId);
-        if (proposta.Status != StatusProposta.Aprovada) throw new PropostaNaoAprovadaException(propostaId);
-
         var contratacao = new Contratacao(propostaId);
         await _contratacaoRepository.AddAsync(contratacao);
     }

@@ -2,8 +2,8 @@ using Insurance.Application;
 using Insurance.Application.Contracts;
 using Insurance.Application.Messaging;
 using Insurance.ContratacaoService.Api.Middleware;
+using Insurance.ContratacaoService.Infra.Persistence;
 using Insurance.Domain.Repositories.Contracts;
-using Insurance.Infra.Persistence;
 using Insurance.Infra.Repositories;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -14,18 +14,14 @@ var builder = WebApplication.CreateBuilder(args);
 var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbName = Environment.GetEnvironmentVariable("DB_NAME");
 var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-var connectionString = $"Server={dbHost};Database={dbName};User Id=sa;Password={dbPassword};TrustServerCertificate=True";
 if (!string.IsNullOrEmpty(dbHost) && !string.IsNullOrEmpty(dbName) && !string.IsNullOrEmpty(dbPassword))
 {
     connectionString = $"Server={dbHost};Database={dbName};User Id=sa;Password={dbPassword};TrustServerCertificate=True";
 }
-else
-{
-    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-}
 
-builder.Services.AddDbContext<InsuranceDbContext>(options =>
+builder.Services.AddDbContext<ContratacaoDbContext>(options =>
     options.UseSqlServer(
         connectionString,
         sqlOptions => sqlOptions.EnableRetryOnFailure(
@@ -35,11 +31,13 @@ builder.Services.AddDbContext<InsuranceDbContext>(options =>
         )
     )
 );
+builder.Services.AddScoped<IContratacaoRepository, ContratacaoRepository>();
+
+builder.Services.AddScoped<IContratacaoApplicationService, ContratacaoApplicationService>();
 
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<PropostaAprovadaConsumer>();
-
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("rabbitmq", "/", h =>
@@ -47,7 +45,6 @@ builder.Services.AddMassTransit(x =>
             h.Username("guest");
             h.Password("guest");
         });
-
         cfg.ReceiveEndpoint("proposta-aprovada-queue", e =>
         {
             e.ConfigureConsumer<PropostaAprovadaConsumer>(context);
@@ -55,25 +52,17 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
-builder.Services.AddScoped<IPropostaRepository, PropostaRepository>();
-builder.Services.AddScoped<IContratacaoRepository, ContratacaoRepository>();
-
-builder.Services.AddScoped<IPropostaApplicationService, PropostaApplicationService>();
-builder.Services.AddScoped<IContratacaoApplicationService, ContratacaoApplicationService>();
-
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Insurance - Contratação API",
+        Title = "Insurance - Contratacao API",
         Version = "v1",
-        Description = "API de Contratação de Seguros"
+        Description = "API de Contratacao de Seguros"
     });
 });
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -91,8 +80,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     try
     {
-        var dbContext = services.GetRequiredService<InsuranceDbContext>();
-
+        var dbContext = services.GetRequiredService<ContratacaoDbContext>();
         dbContext.Database.Migrate();
     }
     catch (Exception ex)
@@ -104,10 +92,15 @@ using (var scope = app.Services.CreateScope())
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseCors("AllowAll");
-app.UseSwagger();
-app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Insurance API V1"));
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Insurance API V1"));
+}
+
 app.UseHttpsRedirection();
 app.MapControllers();
-
 app.MapGet("/health", () => Results.Ok("Healthy"));
+
 app.Run();

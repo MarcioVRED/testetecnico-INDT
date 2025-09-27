@@ -1,15 +1,15 @@
-﻿using Insurance.Domain.Entities.Contratacao;
+﻿using Insurance.ContratacaoService.Infra.Persistence;
+using Insurance.Domain.Entities.Contratacao;
 using Insurance.Domain.Repositories.Contracts;
-using Insurance.Infra.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace Insurance.Infra.Repositories
 {
     public class ContratacaoRepository : IContratacaoRepository
     {
-        private readonly InsuranceDbContext _context;
+        private readonly ContratacaoDbContext _context;
 
-        public ContratacaoRepository(InsuranceDbContext context)
+        public ContratacaoRepository(ContratacaoDbContext context)
         {
             _context = context;
         }

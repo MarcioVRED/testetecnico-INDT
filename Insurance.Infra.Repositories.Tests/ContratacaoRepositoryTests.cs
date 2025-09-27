@@ -1,5 +1,5 @@
-﻿using Insurance.Domain.Entities.Contratacao;
-using Insurance.Infra.Persistence;
+﻿using Insurance.ContratacaoService.Infra.Persistence;
+using Insurance.Domain.Entities.Contratacao;
 using Insurance.Infra.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,13 +7,13 @@ namespace Insurance.ContratacaoService.Api.Tests.Repositories
 {
     public class ContratacaoRepositoryTests
     {
-        private InsuranceDbContext CreateDbContext()
+        private ContratacaoDbContext CreateDbContext()
         {
-            var options = new DbContextOptionsBuilder<InsuranceDbContext>()
+            var options = new DbContextOptionsBuilder<ContratacaoDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
 
-            return new InsuranceDbContext(options);
+            return new ContratacaoDbContext(options);
         }
 
         [Fact]

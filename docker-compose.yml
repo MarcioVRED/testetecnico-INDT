@@ -1,6 +1,6 @@
 services:
-  sqlserver:
-    container_name: insurance-sqlserver
+  proposta-db:
+    container_name: proposta-db
     image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
       ACCEPT_EULA: Y
@@ -10,10 +10,30 @@ services:
     networks:
       - insurance-network
     volumes:
-      - sqlserver-data:/var/opt/mssql
+      - proposta-db-data:/var/opt/mssql 
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "127.0.0.1", "-U", "sa", "-P", "SenhaForte12345", "-Q", "SELECT 1", "-C"]      
+      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "127.0.0.1", "-U", "sa", "-P", "SenhaForte12345", "-Q", "SELECT 1", "-C"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  contratacao-db:
+    container_name: contratacao-db
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: "SenhaForte12345"
+    ports:
+      - "1434:1433"
+    networks:
+      - insurance-network
+    volumes:
+      - contratacao-db-data:/var/opt/mssql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "127.0.0.1", "-U", "sa", "-P", "SenhaForte12345", "-Q", "SELECT 1", "-C"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -40,13 +60,14 @@ services:
       context: .
       dockerfile: Insurance.PropostaService.Api/Dockerfile
     depends_on:
-      sqlserver:
+      proposta-db: 
         condition: service_healthy
       rabbitmq:
-        condition: service_started 
+        condition: service_started
     environment:
-      DB_HOST: "insurance-sqlserver"
-      DB_NAME: "InsuranceDb"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DB_HOST: "proposta-db" 
+      DB_NAME: "PropostaDb" 
       DB_SA_PASSWORD: "SenhaForte12345"
       RabbitMq__Host: "insurance-rabbitmq"
       DOTNET_RUNNING_IN_CONTAINER: true
@@ -62,15 +83,16 @@ services:
       context: .
       dockerfile: Insurance.ContratacaoService.Api/Dockerfile
     depends_on:
-      sqlserver:
+      contratacao-db:
         condition: service_healthy
       rabbitmq:
         condition: service_started
       propostaservice:
         condition: service_started
     environment:
-      DB_HOST: "insurance-sqlserver"
-      DB_NAME: "InsuranceDb"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DB_HOST: "contratacao-db"
+      DB_NAME: "ContratacaoDb"
       DB_SA_PASSWORD: "SenhaForte12345"
       RabbitMq__Host: "insurance-rabbitmq"
       DOTNET_RUNNING_IN_CONTAINER: true
@@ -81,7 +103,8 @@ services:
     restart: unless-stopped
 
 volumes:
-  sqlserver-data:
+  proposta-db-data:
+  contratacao-db-data:
   rabbitmq-data:
 
 networks:

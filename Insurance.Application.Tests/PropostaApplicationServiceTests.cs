@@ -1,10 +1,11 @@
-﻿using Moq;
+﻿using FluentAssertions;
 using Insurance.Application.Events;
+using Insurance.Application.Exceptions;
 using Insurance.Domain.Entities.Enums;
 using Insurance.Domain.Entities.Proposta;
-using MassTransit;
 using Insurance.Domain.Repositories.Contracts;
-using FluentAssertions;
+using MassTransit;
+using Moq;
 
 namespace Insurance.Application.Tests.Services;
 
@@ -59,16 +60,6 @@ public class PropostaApplicationServiceTests
     }
 
     [Fact]
-    public async Task AlterarStatus_DeveRetornarFalse_QuandoPropostaNaoExiste()
-    {
-        _repoMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync((Proposta?)null);
-
-        var result = await _service.AlterarStatus(Guid.NewGuid(), StatusProposta.Aprovada);
-
-        result.Should().BeFalse();
-    }
-
-    [Fact]
     public async Task AlterarStatus_DeveAtualizarStatusSemPublicarEvent_QuandoNaoAprovada()
     {
         var proposta = new Proposta("Cliente", 100);
@@ -80,5 +71,27 @@ public class PropostaApplicationServiceTests
         proposta.Status.Should().Be(StatusProposta.Rejeitada);
         _repoMock.Verify(r => r.UpdateAsync(proposta), Times.Once);
         _busMock.Verify(b => b.Publish(It.IsAny<PropostaAprovadaEvent>(), default), Times.Never);
+    }
+
+    [Fact]
+    public async Task AlterarStatus_DeveLancarExcecao_QuandoPropostaNaoEncontrada()
+    {
+        _repoMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync((Proposta?)null);
+
+        Func<Task> act = async () => await _service.AlterarStatus(Guid.NewGuid(), StatusProposta.Aprovada);
+
+        await act.Should().ThrowAsync<PropostaNaoEncontradaException>();
+    }
+
+    [Fact]
+    public async Task AlterarStatus_DeveLancarExcecao_AoTentarAprovarPropostaRejeitada()
+    {
+        var proposta = new Proposta("Cliente", 100);
+        proposta.AlterarStatus(StatusProposta.Rejeitada); // Status inicial é Rejeitada
+        _repoMock.Setup(r => r.GetByIdAsync(proposta.Id)).ReturnsAsync(proposta);
+
+        Func<Task> act = async () => await _service.AlterarStatus(proposta.Id, StatusProposta.Aprovada);
+
+        await act.Should().ThrowAsync<AlteracaoStatusPropostaInvalidaException>();
     }
 }

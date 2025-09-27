@@ -1,15 +1,15 @@
 ﻿using Insurance.Domain.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Insurance.Domain.Entities.Proposta;
-using Insurance.Infra.Persistence;
+using Insurance.PropostaService.Infra.Persistence;
 
 namespace Insurance.Infra.Repositories;
 
 public class PropostaRepository : IPropostaRepository
 {
-    private readonly InsuranceDbContext _context;
+    private readonly PropostaDbContext _context;
 
-    public PropostaRepository(InsuranceDbContext context)
+    public PropostaRepository(PropostaDbContext context)
     {
         _context = context;
     }

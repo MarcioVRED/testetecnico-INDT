@@ -1,5 +1,6 @@
 ﻿using Insurance.Application.Contracts;
 using Insurance.Application.Events;
+using Insurance.Application.Exceptions;
 using Insurance.Domain.Entities.Enums;
 using Insurance.Domain.Entities.Proposta;
 using Insurance.Domain.Repositories.Contracts;
@@ -26,15 +27,23 @@ public class PropostaApplicationService : IPropostaApplicationService
     public async Task<IEnumerable<Proposta>> ListarPropostas() =>
         await _repository.GetAllAsync();
 
-    public async Task<bool> AlterarStatus(Guid id, StatusProposta status)
+    public async Task<bool> AlterarStatus(Guid id, StatusProposta novoStatus)
     {
         var proposta = await _repository.GetByIdAsync(id);
-        if (proposta == null) return false;
+        if (proposta == null)
+        {
+            throw new PropostaNaoEncontradaException(id);
+        }
 
-        proposta.AlterarStatus(status);
+        if (proposta.Status == StatusProposta.Rejeitada && novoStatus == StatusProposta.Aprovada)
+        {
+            throw new AlteracaoStatusPropostaInvalidaException(id);
+        }
+
+        proposta.AlterarStatus(novoStatus);
         await _repository.UpdateAsync(proposta);
 
-        if (status == StatusProposta.Aprovada)
+        if (novoStatus == StatusProposta.Aprovada)
         {
             await _bus.Publish(new PropostaAprovadaEvent { PropostaId = proposta.Id });
         }

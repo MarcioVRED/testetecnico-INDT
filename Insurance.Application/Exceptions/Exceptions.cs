@@ -27,3 +27,9 @@ public class ContratacaoNaoEncontradaException : Exception
     public ContratacaoNaoEncontradaException(Guid id)
         : base($"Contratação com id {id} não encontrada.") { }
 }
+
+public class AlteracaoStatusPropostaInvalidaException : BusinessException
+{
+    public AlteracaoStatusPropostaInvalidaException(Guid propostaId)
+        : base($"Não é possível aprovar uma proposta que já foi rejeitada. PropostaId: {propostaId}") { }
+}

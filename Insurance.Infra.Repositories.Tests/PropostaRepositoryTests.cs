@@ -1,6 +1,6 @@
 ﻿using Insurance.Domain.Entities.Proposta;
-using Insurance.Infra.Persistence;
 using Insurance.Infra.Repositories;
+using Insurance.PropostaService.Infra.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -8,13 +8,13 @@ namespace Insurance.PropostaService.Api.Tests.Repositories;
 
 public class PropostaRepositoryTests
 {
-    private InsuranceDbContext CreateDbContext()
+    private PropostaDbContext CreateDbContext()
     {
-        var options = new DbContextOptionsBuilder<InsuranceDbContext>()
+        var options = new DbContextOptionsBuilder<PropostaDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
 
-        return new InsuranceDbContext(options);
+        return new PropostaDbContext(options);
     }
 
     [Fact]

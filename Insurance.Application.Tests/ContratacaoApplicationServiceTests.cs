@@ -11,12 +11,11 @@ namespace Insurance.Application.Tests.Services;
 public class ContratacaoApplicationServiceTests
 {
     private readonly Mock<IContratacaoRepository> _contratacaoRepo = new();
-    private readonly Mock<IPropostaRepository> _propostaRepo = new();
     private readonly ContratacaoApplicationService _service;
 
     public ContratacaoApplicationServiceTests()
     {
-        _service = new ContratacaoApplicationService(_contratacaoRepo.Object, _propostaRepo.Object);
+        _service = new ContratacaoApplicationService(_contratacaoRepo.Object);
     }
 
     [Fact]
@@ -25,33 +24,9 @@ public class ContratacaoApplicationServiceTests
         var proposta = new Proposta("Cliente", 100);
         proposta.AlterarStatus(StatusProposta.Aprovada);
 
-        _propostaRepo.Setup(r => r.GetByIdAsync(proposta.Id)).ReturnsAsync(proposta);
-
         await _service.ContratarProposta(proposta.Id);
 
         _contratacaoRepo.Verify(r => r.AddAsync(It.IsAny<Contratacao>()), Times.Once);
-    }
-
-    [Fact]
-    public async Task ContratarProposta_DeveLancarExcecao_QuandoPropostaNaoEncontrada()
-    {
-        _propostaRepo.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync((Proposta?)null);
-
-        Func<Task> act = async () => await _service.ContratarProposta(Guid.NewGuid());
-
-        await act.Should().ThrowAsync<PropostaNaoEncontradaException>();
-    }
-
-    [Fact]
-    public async Task ContratarProposta_DeveLancarExcecao_QuandoPropostaNaoAprovada()
-    {
-        var proposta = new Proposta("Cliente", 100);
-
-        _propostaRepo.Setup(r => r.GetByIdAsync(proposta.Id)).ReturnsAsync(proposta);
-
-        Func<Task> act = async () => await _service.ContratarProposta(proposta.Id);
-
-        await act.Should().ThrowAsync<PropostaNaoAprovadaException>();
     }
 
     [Fact]
@@ -93,7 +68,6 @@ public class ContratacaoApplicationServiceTests
         var proposta = new Proposta("Cliente", 100);
         proposta.AlterarStatus(StatusProposta.Aprovada);
 
-        _propostaRepo.Setup(r => r.GetByIdAsync(proposta.Id)).ReturnsAsync(proposta);
 
         Contratacao? contratacaoCriada = null;
         _contratacaoRepo.Setup(r => r.AddAsync(It.IsAny<Contratacao>()))
