@@ -1,4 +1,4 @@
-# Insurance System
+# Insurance Services
 
 Solução modular em .NET 8 com arquitetura hexagonal, composta por:
 
@@ -14,10 +14,10 @@ Inclui **RabbitMQ** e **MassTransit** para eventos assíncronos e **SQL Server**
 
 ## Pré-requisitos
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)  
-- [Docker e Docker Compose](https://www.docker.com/)  
-- [Postman](https://www.postman.com/) (opcional, para testar endpoints)  
-
+- [.NET 8 SDK] (https://dotnet.microsoft.com/en-us/download/dotnet/8.0)  
+- [Docker e Docker Compose] (https://www.docker.com/)  
+- [Postman] (https://www.postman.com/) (opcional, para testar endpoints)  
+- SQL Server (se executar por docker , não obrigatório)
 ---
 
 ## Clone do repositório
@@ -89,7 +89,7 @@ Seguindo a ordem de versionamento.
 Executar todos os testes unitários:
 
 ```bash
-dotnet test --settings solution.runsettings --collect:"XPlat code coverage"
+dotnet test
 ```
 
 - Testes de Domain, Application, API e Consumer/Mensageria incluídos.
@@ -102,6 +102,9 @@ dotnet test --settings solution.runsettings --collect:"XPlat code coverage"
 
 reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coveragereport -reporttypes:Html
 ```
+
+Para visualizar toda a cobertura de testes abra o arquivo  
+- C:\labs\testetecnico-INDT\coveragereport/index.html.
 
 ## Postman Collection
 
@@ -129,6 +132,8 @@ Infra – Repositórios e persistência (SQL Server)
 API – Controllers (Ports)
 
 Eventos – PropostaAprovadaEvent propagado via RabbitMQ (Adapters)
+
+Tests - Testes Unitários 
 
 
 ## Comunicação entre APIs via Mensageria
