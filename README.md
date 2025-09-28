@@ -148,6 +148,6 @@ Essa arquitetura desacopla os serviços e garante escalabilidade e resiliência.
 
 
 
-## Diagrama completo disponível em:
+## Diagrama:
 
 ![Diagrama da Solução](docs/diagrama-solucao.png)
