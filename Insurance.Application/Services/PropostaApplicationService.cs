@@ -4,6 +4,7 @@ using Insurance.Application.Exceptions;
 using Insurance.Domain.Entities.Enums;
 using Insurance.Domain.Entities.Proposta;
 using Insurance.Domain.Repositories.Contracts;
+using Insurance.Infra.Repositories;
 using MassTransit;
 
 public class PropostaApplicationService : IPropostaApplicationService
@@ -49,5 +50,14 @@ public class PropostaApplicationService : IPropostaApplicationService
         }
 
         return true;
+    }
+
+    public async Task<StatusProposta> ObterStatusAsync(Guid propostaId)
+    {
+        var proposta = await _repository.GetByIdAsync(propostaId);
+        if (proposta == null)
+            throw new PropostaNaoEncontradaException(propostaId);
+
+        return proposta.Status;
     }
 }

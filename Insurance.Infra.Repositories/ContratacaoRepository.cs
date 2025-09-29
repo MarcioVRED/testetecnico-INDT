@@ -1,5 +1,5 @@
 ﻿using Insurance.ContratacaoService.Infra.Persistence;
-using Insurance.Domain.Entities.Contratacao;
+using Insurance.Domain.Entities;
 using Insurance.Domain.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
 

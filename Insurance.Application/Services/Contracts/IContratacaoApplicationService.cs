@@ -1,11 +1,11 @@
-﻿using Insurance.Domain.Entities.Contratacao;
+﻿using ContratacaoEntity = Insurance.Domain.Entities.Contratacao;
 
 namespace Insurance.Application.Contracts
 {
     public interface IContratacaoApplicationService
     {
         Task ContratarProposta(Guid propostaId);
-        Task<IEnumerable<Contratacao>> ListarContratacoes();
-        Task<Contratacao> ObterPorId(Guid id);
+        Task<IEnumerable<ContratacaoEntity>> ListarContratacoes();
+        Task<ContratacaoEntity> ObterPorId(Guid id);
     }
 }

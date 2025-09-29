@@ -1,38 +1,50 @@
 ﻿using Moq;
 using Insurance.Application.Exceptions;
-using Insurance.Domain.Entities.Contratacao;
-using Insurance.Domain.Entities.Enums;
-using Insurance.Domain.Entities.Proposta;
 using Insurance.Domain.Repositories.Contracts;
 using FluentAssertions;
+using Insurance.Contratacao.Application.Services.Contracts;
+using ContratacaoEntity = Insurance.Domain.Entities.Contratacao;
 
 namespace Insurance.Application.Tests.Services;
 
 public class ContratacaoApplicationServiceTests
 {
     private readonly Mock<IContratacaoRepository> _contratacaoRepo = new();
+    private readonly Mock<IPropostaStatusChecker> _propostaStatusChecker = new();
     private readonly ContratacaoApplicationService _service;
 
     public ContratacaoApplicationServiceTests()
     {
-        _service = new ContratacaoApplicationService(_contratacaoRepo.Object);
+        _service = new ContratacaoApplicationService(_contratacaoRepo.Object, _propostaStatusChecker.Object);
     }
 
     [Fact]
     public async Task ContratarProposta_DeveCriarContratacao_QuandoPropostaAprovada()
     {
-        var proposta = new Proposta("Cliente", 100);
-        proposta.AlterarStatus(StatusProposta.Aprovada);
+        var propostaId = Guid.NewGuid();
+        _propostaStatusChecker.Setup(p => p.EhAprovadaAsync(propostaId)).ReturnsAsync(true);
 
-        await _service.ContratarProposta(proposta.Id);
+        await _service.ContratarProposta(propostaId);
 
-        _contratacaoRepo.Verify(r => r.AddAsync(It.IsAny<Contratacao>()), Times.Once);
+        _contratacaoRepo.Verify(r => r.AddAsync(It.IsAny<ContratacaoEntity>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task ContratarProposta_DeveLancarExcecao_QuandoPropostaNaoAprovada()
+    {
+        var propostaId = Guid.NewGuid();
+        _propostaStatusChecker.Setup(p => p.EhAprovadaAsync(propostaId)).ReturnsAsync(false);
+
+        Func<Task> act = async () => await _service.ContratarProposta(propostaId);
+
+        await act.Should().ThrowAsync<PropostaNaoAprovadaException>();
+        _contratacaoRepo.Verify(r => r.AddAsync(It.IsAny<ContratacaoEntity>()), Times.Never);
     }
 
     [Fact]
     public async Task ObterPorId_DeveRetornarContratacao()
     {
-        var contratacao = new Contratacao(Guid.NewGuid());
+        var contratacao = new ContratacaoEntity(Guid.NewGuid());
         _contratacaoRepo.Setup(r => r.GetByIdAsync(contratacao.Id)).ReturnsAsync(contratacao);
 
         var result = await _service.ObterPorId(contratacao.Id);
@@ -43,7 +55,7 @@ public class ContratacaoApplicationServiceTests
     [Fact]
     public async Task ObterPorId_DeveLancarExcecao_QuandoNaoEncontrada()
     {
-        _contratacaoRepo.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync((Contratacao?)null);
+        _contratacaoRepo.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync((ContratacaoEntity?)null);
 
         Func<Task> act = async () => await _service.ObterPorId(Guid.NewGuid());
 
@@ -53,7 +65,7 @@ public class ContratacaoApplicationServiceTests
     [Fact]
     public async Task ListarContratacoes_DeveRetornarLista()
     {
-        var list = new List<Contratacao> { new(Guid.NewGuid()) };
+        var list = new List<ContratacaoEntity> { new(Guid.NewGuid()) };
         _contratacaoRepo.Setup(r => r.GetAllAsync()).ReturnsAsync(list);
 
         var result = await _service.ListarContratacoes();
@@ -63,28 +75,9 @@ public class ContratacaoApplicationServiceTests
     }
 
     [Fact]
-    public async Task ContratarProposta_DeveCriarContratacao_ComValoresCorretos()
-    {
-        var proposta = new Proposta("Cliente", 100);
-        proposta.AlterarStatus(StatusProposta.Aprovada);
-
-
-        Contratacao? contratacaoCriada = null;
-        _contratacaoRepo.Setup(r => r.AddAsync(It.IsAny<Contratacao>()))
-                         .Callback<Contratacao>(c => contratacaoCriada = c)
-                         .Returns(Task.CompletedTask);
-
-        await _service.ContratarProposta(proposta.Id);
-
-        contratacaoCriada.Should().NotBeNull();
-        contratacaoCriada!.PropostaId.Should().Be(proposta.Id);
-        contratacaoCriada.DataContratacao.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
-    }
-
-    [Fact]
     public async Task ListarContratacoes_DeveRetornarListaVazia_QuandoNaoExistirem()
     {
-        _contratacaoRepo.Setup(r => r.GetAllAsync()).ReturnsAsync(new List<Contratacao>());
+        _contratacaoRepo.Setup(r => r.GetAllAsync()).ReturnsAsync(new List<ContratacaoEntity>());
 
         var result = await _service.ListarContratacoes();
 

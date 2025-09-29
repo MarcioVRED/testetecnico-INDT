@@ -1,4 +1,4 @@
-﻿using Insurance.Domain.Entities.Contratacao;
+﻿using Insurance.Domain.Entities;
 
 namespace Insurance.Domain.Tests.Entities;
 

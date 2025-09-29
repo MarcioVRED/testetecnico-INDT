@@ -1,4 +1,4 @@
-﻿namespace Insurance.Domain.Entities.Contratacao;
+﻿namespace Insurance.Domain.Entities;
 
 public class Contratacao : BaseEntity
 {

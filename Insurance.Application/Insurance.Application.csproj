@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Insurance.Domain.Entities\Insurance.Domain.Entities.csproj" />
     <ProjectReference Include="..\Insurance.Domain.Repositories\Insurance.Domain.Repositories.csproj" />
     <ProjectReference Include="..\Insurance.Infra.Repositories\Insurance.Infra.Repositories.csproj" />
   </ItemGroup>

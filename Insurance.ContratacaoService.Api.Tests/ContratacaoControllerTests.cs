@@ -2,7 +2,7 @@
 using Insurance.Application.Dtos;
 using Insurance.Application.Exceptions;
 using Insurance.ContratacaoService.Api.Controllers;
-using Insurance.Domain.Entities.Contratacao;
+using ContratacaoEntity = Insurance.Domain.Entities.Contratacao;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -40,7 +40,7 @@ public class ContratacaoControllerTests
         var contratacao2 = CriarContratacao(Guid.NewGuid(), Guid.NewGuid());
 
         _serviceMock.Setup(s => s.ListarContratacoes())
-                    .ReturnsAsync(new List<Contratacao> { contratacao1, contratacao2 });
+                    .ReturnsAsync(new List<ContratacaoEntity> { contratacao1, contratacao2 });
 
         var result = await _controller.GetAll();
 
@@ -85,19 +85,19 @@ public class ContratacaoControllerTests
         await Assert.ThrowsAsync<PropostaNaoEncontradaException>(() => _controller.Contratar(propostaId));
     }
 
-    private Contratacao CriarContratacao(Guid id, Guid propostaId)
+    private ContratacaoEntity CriarContratacao(Guid id, Guid propostaId)
     {
-        var contratacao = (Contratacao)Activator.CreateInstance(
-            typeof(Contratacao),
+        var contratacao = (ContratacaoEntity)Activator.CreateInstance(
+            typeof(ContratacaoEntity),
             nonPublic: true)!;
 
-        typeof(Contratacao).GetProperty("Id")!
+        typeof(ContratacaoEntity).GetProperty("Id")!
             .SetValue(contratacao, id);
 
-        typeof(Contratacao).GetProperty("PropostaId")!
+        typeof(ContratacaoEntity).GetProperty("PropostaId")!
             .SetValue(contratacao, propostaId);
 
-        typeof(Contratacao).GetProperty("DataContratacao")!
+        typeof(ContratacaoEntity).GetProperty("DataContratacao")!
             .SetValue(contratacao, DateTime.UtcNow);
 
         return contratacao;

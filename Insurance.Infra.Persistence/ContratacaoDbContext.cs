@@ -1,4 +1,4 @@
-﻿using Insurance.Domain.Entities.Contratacao;
+﻿using Insurance.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Insurance.ContratacaoService.Infra.Persistence; 
