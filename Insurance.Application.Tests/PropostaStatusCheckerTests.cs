@@ -8,11 +8,11 @@ namespace Insurance.Application.Tests.Services;
 public class PropostaStatusCheckerTests
 {
     private readonly Mock<IPropostaApplicationService> _propostaService = new();
-    private readonly PropostaStatusChecker _checker;
+    private readonly PropostaStatusCheckerService _checker;
 
     public PropostaStatusCheckerTests()
     {
-        _checker = new PropostaStatusChecker(_propostaService.Object);
+        _checker = new PropostaStatusCheckerService(_propostaService.Object);
     }
 
     [Fact]

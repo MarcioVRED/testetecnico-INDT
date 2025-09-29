@@ -2,11 +2,11 @@
 using Insurance.Contratacao.Application.Services.Contracts;
 using Insurance.Domain.Entities.Enums;
 
-public class PropostaStatusChecker : IPropostaStatusChecker
+public class PropostaStatusCheckerService : IPropostaStatusCheckerService
 {
     private readonly IPropostaApplicationService _propostaService;
 
-    public PropostaStatusChecker(IPropostaApplicationService propostaService)
+    public PropostaStatusCheckerService(IPropostaApplicationService propostaService)
     {
         _propostaService = propostaService;
     }

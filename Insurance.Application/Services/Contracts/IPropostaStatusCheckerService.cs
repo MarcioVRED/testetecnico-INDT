@@ -1,6 +1,6 @@
 ﻿namespace Insurance.Contratacao.Application.Services.Contracts;
 
-public interface IPropostaStatusChecker
+public interface IPropostaStatusCheckerService
 {
     Task<bool> EhAprovadaAsync(Guid propostaId);
 }

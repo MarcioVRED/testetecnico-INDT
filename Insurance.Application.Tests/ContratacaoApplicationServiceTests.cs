@@ -10,7 +10,7 @@ namespace Insurance.Application.Tests.Services;
 public class ContratacaoApplicationServiceTests
 {
     private readonly Mock<IContratacaoRepository> _contratacaoRepo = new();
-    private readonly Mock<IPropostaStatusChecker> _propostaStatusChecker = new();
+    private readonly Mock<IPropostaStatusCheckerService> _propostaStatusChecker = new();
     private readonly ContratacaoApplicationService _service;
 
     public ContratacaoApplicationServiceTests()

@@ -9,9 +9,9 @@ namespace Insurance.Application;
 public class ContratacaoApplicationService : IContratacaoApplicationService
 {
     private readonly IContratacaoRepository _contratacaoRepository;
-    private readonly IPropostaStatusChecker _propostaStatusChecker;
+    private readonly IPropostaStatusCheckerService _propostaStatusChecker;
 
-    public ContratacaoApplicationService(IContratacaoRepository contratacaoRepository, IPropostaStatusChecker propostaStatusChecker)
+    public ContratacaoApplicationService(IContratacaoRepository contratacaoRepository, IPropostaStatusCheckerService propostaStatusChecker)
     {
         _contratacaoRepository = contratacaoRepository;
         _propostaStatusChecker = propostaStatusChecker;
