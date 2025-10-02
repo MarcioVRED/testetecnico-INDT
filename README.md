@@ -18,6 +18,7 @@ Inclui **RabbitMQ** e **MassTransit** para eventos assíncronos e **SQL Server**
 - [Docker e Docker Compose] (https://www.docker.com/)  
 - [Postman] (https://www.postman.com/) (opcional, para testar endpoints)  
 - SQL Server (se executar por docker , não obrigatório)
+- RabbitMQ (se executar por docker , não obrigatório)
 ---
 
 ## Clone do repositório
